@@ -75,9 +75,9 @@ export default function CowDetails({
 
       <div className="text-lg font-semibold">Reprodução</div>
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm text-sm text-gray-700">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span>Status:</span>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2">
+            <span>Status</span>
             <select
               value={cowStatus[cowId]}
               onChange={(e) => updateCowStatus(cowId, e.target.value)}
@@ -88,11 +88,18 @@ export default function CowDetails({
               <option>Inseminada</option>
             </select>
           </div>
-          <span>Próxima inseminação: 15/09/2025</span>
-        </div>
-        <div className="flex justify-between mt-2">
-          <span>Quantidade de filhos: 5</span>
-          <span>Último parto: 15/02/2025</span>
+          <div className="rounded-lg border border-gray-200 px-3 py-2">
+            <div className="text-xs text-gray-500">Próxima inseminação</div>
+            <div className="font-semibold text-gray-800">15/09/2025</div>
+          </div>
+          <div className="rounded-lg border border-gray-200 px-3 py-2">
+            <div className="text-xs text-gray-500">Quantidade de filhos</div>
+            <div className="font-semibold text-gray-800">5</div>
+          </div>
+          <div className="rounded-lg border border-gray-200 px-3 py-2">
+            <div className="text-xs text-gray-500">Último parto</div>
+            <div className="font-semibold text-gray-800">15/02/2025</div>
+          </div>
         </div>
 
         <div className="mt-4">
@@ -113,12 +120,12 @@ export default function CowDetails({
               placeholder="DD/MM/AAAA"
               value={fertilizationDate}
               onChange={(e) => setFertilizationDate(formatDateInput(e.target.value))}
-              className="flex-1 rounded-md border border-gray-300 px-3 py-2 bg-white shadow-sm"
+              className="flex-1 h-10 rounded-md border border-gray-300 px-3 bg-white shadow-sm"
             />
             <button
               type="button"
               onClick={addFertilization}
-              className="border border-[#6EB56B] text-[#6EB56B] rounded-lg px-3 py-2 shadow-sm"
+              className="h-10 min-w-[120px] border border-[#6EB56B] text-[#6EB56B] rounded-lg px-3 shadow-sm"
             >
               + Registrar
             </button>
