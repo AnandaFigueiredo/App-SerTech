@@ -113,19 +113,19 @@ export default function CowDetails({
 
         <div className="mt-4">
           <div className="font-semibold">Fertilização</div>
-          <div className="mt-2 flex items-center gap-2">
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
             <input
               type="text"
               inputMode="numeric"
               placeholder="DD/MM/AAAA"
               value={fertilizationDate}
               onChange={(e) => setFertilizationDate(formatDateInput(e.target.value))}
-              className="flex-1 h-10 rounded-md border border-gray-300 px-3 bg-white shadow-sm"
+              className="w-full sm:flex-1 h-10 rounded-md border border-gray-300 px-3 bg-white shadow-sm"
             />
             <button
               type="button"
               onClick={addFertilization}
-              className="h-10 min-w-[120px] border border-[#6EB56B] text-[#6EB56B] rounded-lg px-3 shadow-sm"
+              className="h-10 w-full sm:w-auto sm:min-w-[120px] border border-[#6EB56B] text-[#6EB56B] rounded-lg px-3 shadow-sm"
             >
               + Registrar
             </button>
