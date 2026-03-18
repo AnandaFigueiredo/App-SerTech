@@ -20,7 +20,7 @@ export default function CowDetails({
         <h1 className="text-2xl font-bold text-[#1f2937]">Vaca {cowId}</h1>
       </div>
 
-      <div className="text-lg font-semibold">Alimentacao</div>
+      <div className="text-lg font-semibold">Alimentação</div>
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
         <svg viewBox="0 0 320 180" className="w-full h-40">
           <rect x="0" y="0" width="320" height="180" rx="8" fill="#F5F5F5" />
@@ -59,21 +59,21 @@ export default function CowDetails({
       </div>
 
       <div className="bg-[#FDEDED] rounded-xl p-4 shadow-sm">
-        <div className="text-center font-semibold">Analise da IA</div>
+        <div className="text-center font-semibold">Análise da IA</div>
         <p className="text-sm text-gray-700 mt-2">
-          O grafico mostra que a vaca esta comendo cada vez menos ao longo da semana,
-          apresentando uma queda visivel no consumo diario de alimento. Esse padrao
+          O gráfico mostra que a vaca está comendo cada vez menos ao longo da semana,
+          apresentando uma queda visível no consumo diário de alimento. Esse padrão
           indica que o animal pode estar com perda de apetite.
         </p>
         <p className="text-sm text-gray-700 mt-2">
           <span className="font-semibold">O que fazer?</span>
           <br />
           Observe o comportamento da vaca e verifique sinais de desconforto. Se o baixo consumo continuar,
-          consulte um veterinario e avalie a qualidade da racao e da agua.
+          consulte um veterinário e avalie a qualidade da ração e da água.
         </p>
       </div>
 
-      <div className="text-lg font-semibold">Reproducao</div>
+      <div className="text-lg font-semibold">Reprodução</div>
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm text-sm text-gray-700">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -88,11 +88,11 @@ export default function CowDetails({
               <option>Inseminada</option>
             </select>
           </div>
-          <span>Proxima inseminacao: 15/09/2025</span>
+          <span>Próxima inseminação: 15/09/2025</span>
         </div>
         <div className="flex justify-between mt-2">
           <span>Quantidade de filhos: 5</span>
-          <span>Ultimo parto: 15/02/2025</span>
+          <span>Último parto: 15/02/2025</span>
         </div>
 
         <div className="mt-4">
@@ -105,7 +105,7 @@ export default function CowDetails({
         </div>
 
         <div className="mt-4">
-          <div className="font-semibold">Fertilizacao</div>
+          <div className="font-semibold">Fertilização</div>
           <div className="mt-2 flex items-center gap-2">
             <input
               type="text"

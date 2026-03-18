@@ -4,21 +4,21 @@ const severityStyles = {
     border: "border-[#6EB56B]",
     text: "text-[#6EB56B]",
     icon: "check_circle",
-    label: "Saudavel",
+    label: "Saudável",
   },
   critical: {
     bg: "bg-[#FDEDED]",
     border: "border-[#D46A6A]",
     text: "text-[#D46A6A]",
     icon: "report",
-    label: "Critico",
+    label: "Crítico",
   },
   attention: {
     bg: "bg-[#FFF7D6]",
     border: "border-[#E0B84E]",
     text: "text-[#E0B84E]",
     icon: "warning",
-    label: "Atencao",
+    label: "Atenção",
   },
 };
 
@@ -59,7 +59,7 @@ export default function Cows({ onBack, onViewDetails, cowStatus, cows, onRemoveC
                   <div>{cow.consumption}</div>
                 </div>
                 <div>
-                  <div className="font-semibold">Producao</div>
+                  <div className="font-semibold">Produção</div>
                   <div>{cow.production}</div>
                 </div>
               </div>

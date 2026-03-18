@@ -5,6 +5,9 @@ import Urgent from "./screens/Urgent.jsx";
 import Register from "./screens/Register.jsx";
 import Cows from "./screens/Cows.jsx";
 import CowDetails from "./screens/CowDetails.jsx";
+import WeeklyData from "./screens/WeeklyData.jsx";
+import Reports from "./screens/Reports.jsx";
+import Login from "./screens/Login.jsx";
 
 export default function App() {
   const defaultCowStatus = {
@@ -13,7 +16,7 @@ export default function App() {
     127: "Vazia",
   };
 
-  const [view, setView] = useState("home");
+  const [view, setView] = useState("login");
   const [selectedCow, setSelectedCow] = useState("120");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [birthDate, setBirthDate] = useState("");
@@ -29,7 +32,7 @@ export default function App() {
     {
       id: "100",
       severity: "ok",
-      severityLabel: "Saudavel",
+      severityLabel: "Saudável",
       weight: "700 kg",
       consumption: "20 kg",
       production: "30 litros",
@@ -37,7 +40,7 @@ export default function App() {
     {
       id: "120",
       severity: "critical",
-      severityLabel: "Critico",
+      severityLabel: "Crítico",
       weight: "700 kg",
       consumption: "13 kg",
       production: "10 litros",
@@ -45,7 +48,7 @@ export default function App() {
     {
       id: "127",
       severity: "attention",
-      severityLabel: "Atencao",
+      severityLabel: "Atenção",
       weight: "700 kg",
       consumption: "17 kg",
       production: "28 litros",
@@ -120,7 +123,7 @@ export default function App() {
       {
         id,
         severity: "attention",
-        severityLabel: "Atencao",
+        severityLabel: "Atenção",
         weight: weightText,
         consumption: "0 kg",
         production: "0 litros",
@@ -168,34 +171,46 @@ export default function App() {
     removeCow(cowId);
   };
 
+  const isLogin = view === "login";
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f6fa]">
-      <div className="relative bg-[#6EB56B] flex items-center h-20 px-4 rounded-2xl">
-        <div className="flex items-center h-full">
-          <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center shadow overflow-hidden">
-            <img src="/public/LogoBar.svg" alt="Logo da empresa" className="w-9 h-9 object-contain" />
+      {!isLogin && (
+        <div className="relative bg-[#6EB56B] flex items-center h-20 px-4 rounded-2xl">
+          <div className="flex items-center h-full">
+            <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center shadow overflow-hidden">
+              <img src="/public/LogoBar.svg" alt="Logo da empresa" className="w-9 h-9 object-contain" />
+            </div>
+          </div>
+          <div className="absolute right-18 top-1/2 -translate-y-1/2 flex items-center">
+            <div className="relative">
+              <span className="material-icons text-white text-3xl">notifications</span>
+              <span className="absolute -top-1 -right-2 bg-yellow-400 text-xs text-black rounded-full px-1">1</span>
+            </div>
+          </div>
+          <div className="ml-auto flex items-center h-full">
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow">
+              <span className="material-icons text-agroGreen text-2xl">person</span>
+            </div>
           </div>
         </div>
-        <div className="absolute right-18 top-1/2 -translate-y-1/2 flex items-center">
-          <div className="relative">
-            <span className="material-icons text-white text-3xl">notifications</span>
-            <span className="absolute -top-1 -right-2 bg-yellow-400 text-xs text-black rounded-full px-1">1</span>
-          </div>
-        </div>
-        <div className="ml-auto flex items-center h-full">
-          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow">
-            <span className="material-icons text-agroGreen text-2xl">person</span>
-          </div>
-        </div>
-      </div>
+      )}
 
-      <div className="flex-1 px-4 py-3 flex flex-col gap-4">
+      <div
+        className={`flex-1 px-4 py-3 flex flex-col ${
+          isLogin ? "items-center justify-center" : "gap-4"
+        }`}
+      >
+        {view === "login" && <Login onLogin={() => setView("home")} />}
+
         {view === "home" && (
           <Home
             onViewAlerts={() => setView("alerts")}
             onViewUrgent={() => setView("urgent")}
             onViewCows={() => setView("cows")}
             onViewRegister={() => setView("register")}
+            onViewWeekly={() => setView("weekly")}
+            onViewReports={() => setView("reports")}
           />
         )}
 
@@ -252,6 +267,10 @@ export default function App() {
             formatDateInput={formatDateInput}
           />
         )}
+
+        {view === "weekly" && <WeeklyData onBack={goBack} />}
+
+        {view === "reports" && <Reports onBack={goBack} />}
       </div>
 
       {isMenuOpen && view === "home" && (
@@ -262,15 +281,15 @@ export default function App() {
                 <span className="material-icons text-[#6EB56B]">agriculture</span>
                 Vacas
               </button>
-              <button className="flex flex-col items-center gap-1">
+              <button type="button" onClick={() => setView("reports")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">description</span>
-                Relatorios
+                Relatórios
               </button>
               <button type="button" onClick={() => setView("register")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">add</span>
                 Novo
               </button>
-              <button className="flex flex-col items-center gap-1">
+              <button type="button" onClick={() => setView("weekly")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">bar_chart</span>
                 Semana
               </button>
@@ -279,20 +298,29 @@ export default function App() {
         </div>
       )}
 
-      <nav className="bg-[#6EB56B] px-6 py-2 flex justify-between items-center text-white text-xs rounded-t-2xl">
-        <button type="button" onClick={() => { setView("home"); setIsMenuOpen(false); }} className="flex flex-col items-center flex-1">
-          <span className="material-icons">home</span>
-          Home
-        </button>
-        <button type="button" onClick={() => setIsMenuOpen((prev) => !prev)} className="flex flex-col items-center flex-1">
-          <span className="material-icons">menu</span>
-          Menu
-        </button>
-        <button type="button" className="flex flex-col items-center flex-1">
-          <span className="material-icons">settings</span>
-          Suporte
-        </button>
-      </nav>
+      {!isLogin && (
+        <nav className="bg-[#6EB56B] px-6 py-2 flex justify-between items-center text-white text-xs rounded-t-2xl">
+          <button
+            type="button"
+            onClick={() => {
+              setView("home");
+              setIsMenuOpen(false);
+            }}
+            className="flex flex-col items-center flex-1"
+          >
+            <span className="material-icons">home</span>
+            Home
+          </button>
+          <button type="button" onClick={() => setIsMenuOpen((prev) => !prev)} className="flex flex-col items-center flex-1">
+            <span className="material-icons">menu</span>
+            Menu
+          </button>
+          <button type="button" className="flex flex-col items-center flex-1">
+            <span className="material-icons">settings</span>
+            Suporte
+          </button>
+        </nav>
+      )}
     </div>
   );
 }

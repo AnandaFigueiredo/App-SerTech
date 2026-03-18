@@ -3,6 +3,8 @@ export default function Home({
   onViewUrgent,
   onViewCows,
   onViewRegister,
+  onViewWeekly,
+  onViewReports,
 }) {
   return (
     <>
@@ -12,7 +14,7 @@ export default function Home({
         <div className="flex flex-col">
           <span className="text-2xl text-white font-bold leading-none">35°</span>
           <span className="text-white font-medium">
-            Risco de estresse termico
+            Risco de estresse térmico
             <span className="material-icons align-middle text-white text-base ml-1">
               error_outline
             </span>
@@ -40,7 +42,7 @@ export default function Home({
             className="flex-1 bg-red-100 rounded-lg p-3 flex flex-col items-center shadow"
           >
             <span className="material-icons text-red-500 text-2xl mb-1">error</span>
-            <span className="font-bold text-red-800">2 urgencias</span>
+            <span className="font-bold text-red-800">2 urgências</span>
             <span className="text-xs text-red-800">Toque para visualizar</span>
           </button>
         </div>
@@ -57,9 +59,13 @@ export default function Home({
             <span className="material-icons text-3xl">agriculture</span>
             Vacas
           </button>
-          <button className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow">
+          <button
+            type="button"
+            onClick={onViewReports}
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+          >
             <span className="material-icons text-3xl">description</span>
-            Relatorios
+            Relatórios
           </button>
           <button
             type="button"
@@ -69,7 +75,11 @@ export default function Home({
             <span className="material-icons text-3xl">add</span>
             Novo animal
           </button>
-          <button className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow">
+          <button
+            type="button"
+            onClick={onViewWeekly}
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+          >
             <span className="material-icons text-3xl">bar_chart</span>
             Dados da semana
           </button>

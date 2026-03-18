@@ -28,11 +28,11 @@ export default function Register({
         <h1 className="text-2xl font-bold text-[#1f2937]">Cadastro de Animal</h1>
       </div>
 
-      <div className="text-center text-lg font-semibold text-[#1f2937]">Informacoes Gerais</div>
+      <div className="text-center text-lg font-semibold text-[#1f2937]">Informações Gerais</div>
 
       <div className="flex flex-col gap-4">
         <label className="flex items-center justify-between gap-3 text-sm text-gray-600">
-          Nome/Numero:
+          Nome/Número:
           <input
             type="text"
             value={nameNumber}
@@ -55,7 +55,7 @@ export default function Register({
 
         <div className="flex items-center justify-between gap-3 text-sm text-gray-600">
           <label className="flex items-center gap-2">
-            Raca:
+            Raça:
             <select
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
@@ -76,12 +76,12 @@ export default function Register({
         </div>
       </div>
 
-      <div className="mt-2 text-lg font-semibold text-[#1f2937]">Reproducao</div>
+      <div className="mt-2 text-lg font-semibold text-[#1f2937]">Reprodução</div>
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3 text-sm text-gray-600">
           <label className="flex items-center gap-2">
-            Ultimo Parto:
+            Último Parto:
             <input
               type="text"
               inputMode="numeric"
@@ -107,7 +107,7 @@ export default function Register({
         </div>
 
         <label className="flex items-center justify-between gap-3 text-sm text-gray-600">
-          N de Crias:
+          Nº de Crias:
           <input
             type="text"
             value={nCrias}
@@ -117,7 +117,7 @@ export default function Register({
         </label>
 
         <label className="flex items-center justify-between gap-3 text-sm text-gray-600">
-          Ultimo Inseminacao:
+          Última Inseminação:
           <input
             type="text"
             inputMode="numeric"
