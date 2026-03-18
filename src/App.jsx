@@ -179,7 +179,7 @@ export default function App() {
         <div className="relative bg-[#6EB56B] flex items-center h-20 px-4 rounded-2xl">
           <div className="flex items-center h-full">
             <div className="w-12 h-12 rounded-lg bg-white/20 flex items-center justify-center shadow overflow-hidden">
-              <img src="/public/LogoBar.svg" alt="Logo da empresa" className="w-9 h-9 object-contain" />
+              <img src="/LogoBar.svg" alt="Logo da empresa" className="w-9 h-9 object-contain" />
             </div>
           </div>
           <div className="absolute right-18 top-1/2 -translate-y-1/2 flex items-center">

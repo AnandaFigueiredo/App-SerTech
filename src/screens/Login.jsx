@@ -5,7 +5,7 @@ export default function Login({ onLogin }) {
       <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-6">
         <div className="flex flex-col items-center gap-3">
           <img
-            src="/public/LogoInicio.svg"
+            src="/LogoInicio.svg"
             alt="Logo do app"
             className="w-40 h-40 object-contain"
           />
