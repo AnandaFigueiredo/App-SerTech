@@ -40,7 +40,9 @@ export default function Cows({ onBack, onViewDetails, cowStatus, cows, onRemoveC
             <div key={cow.id} className={`${style.bg} border-l-4 ${style.border} rounded-xl p-4 shadow`}>
               <div className="flex items-center justify-between">
                 <div className={`flex items-center gap-3 ${style.text}`}>
-                  <span className="material-icons text-4xl">pets</span>
+                  <span className="text-4xl" role="img" aria-label="Vaca">
+                    🐄
+                  </span>
                   <div className="text-xs text-gray-500">Vaca</div>
                 </div>
                 <div className="text-lg font-semibold">{cow.id}</div>
