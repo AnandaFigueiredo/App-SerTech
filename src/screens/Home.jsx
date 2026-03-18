@@ -50,11 +50,11 @@ export default function Home({
 
       <div>
         <h2 className="text-lg font-bold mb-2">Funcionalidades</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 place-items-center">
           <button
             type="button"
             onClick={onViewCows}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
           >
             <span className="material-icons text-3xl">agriculture</span>
             Vacas
@@ -62,7 +62,7 @@ export default function Home({
           <button
             type="button"
             onClick={onViewReports}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
           >
             <span className="material-icons text-3xl">description</span>
             Relatórios
@@ -70,7 +70,7 @@ export default function Home({
           <button
             type="button"
             onClick={onViewRegister}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
           >
             <span className="material-icons text-3xl">add</span>
             Novo animal
@@ -78,7 +78,7 @@ export default function Home({
           <button
             type="button"
             onClick={onViewWeekly}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center p-6 text-white font-bold text-lg gap-2 shadow"
+            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
           >
             <span className="material-icons text-3xl">bar_chart</span>
             Dados da semana

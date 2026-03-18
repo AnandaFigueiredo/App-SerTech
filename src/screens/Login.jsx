@@ -1,11 +1,14 @@
+
 export default function Login({ onLogin }) {
   return (
     <div className="w-full max-w-sm">
       <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-6">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-20 h-20 rounded-2xl bg-[#6EB56B]/10 flex items-center justify-center shadow-sm">
-            <img src="/public/LogoBar.svg" alt="Logo do app" className="w-12 h-12 object-contain" />
-          </div>
+          <img
+            src="/public/LogoInicio.svg"
+            alt="Logo do app"
+            className="w-40 h-40 object-contain"
+          />
           <div className="text-center">
             <div className="text-2xl font-bold text-[#1f2937]">Bem-vindo</div>
             <div className="text-sm text-gray-500">Acesse para acompanhar seu rebanho</div>
