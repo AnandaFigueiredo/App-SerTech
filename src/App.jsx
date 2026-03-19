@@ -307,8 +307,14 @@ export default function App() {
   const handleLogin = async (email, password) => {
     setAuthError("");
     setAuthLoading(true);
+    const cleanEmail = (email || "").trim();
+    if (!cleanEmail || !password) {
+      setAuthLoading(false);
+      setAuthError("Informe email e senha validos.");
+      return;
+    }
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
+      email: cleanEmail,
       password,
     });
     if (error) {
@@ -326,13 +332,14 @@ export default function App() {
   const handleSignUp = async (email, password) => {
     setAuthError("");
     setAuthLoading(true);
-    if (!email || !password) {
+    const cleanEmail = (email || "").trim();
+    if (!cleanEmail || !password) {
       setAuthLoading(false);
       setAuthError("Informe email e senha para cadastrar.");
       return;
     }
     const { data, error } = await supabase.auth.signUp({
-      email,
+      email: cleanEmail,
       password,
     });
     if (error) {
