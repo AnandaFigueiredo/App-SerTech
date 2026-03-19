@@ -1,5 +1,10 @@
 
-export default function Login({ onLogin }) {
+import { useState } from "react";
+
+export default function Login({ onLogin, onSignUp, isLoading, error }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="w-full max-w-sm">
       <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-6">
@@ -21,6 +26,8 @@ export default function Login({ onLogin }) {
             <input
               type="email"
               placeholder="seuemail@exemplo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 bg-white shadow-sm"
             />
           </label>
@@ -29,6 +36,8 @@ export default function Login({ onLogin }) {
             <input
               type="password"
               placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 bg-white shadow-sm"
             />
           </label>
@@ -37,16 +46,32 @@ export default function Login({ onLogin }) {
           </button>
         </div>
 
+        {error && (
+          <div className="mt-3 rounded-lg border border-[#F3CACA] bg-[#FDEDED] px-3 py-2 text-xs text-[#B45353]">
+            {error}
+          </div>
+        )}
+
         <button
           type="button"
-          onClick={onLogin}
-          className="mt-6 w-full bg-[#6EB56B] text-white font-semibold py-2 rounded-xl shadow"
+          onClick={() => onLogin(email, password)}
+          className="mt-6 w-full bg-[#6EB56B] text-white font-semibold py-2 rounded-xl shadow disabled:opacity-60"
+          disabled={isLoading}
         >
-          Entrar
+          {isLoading ? "Entrando..." : "Entrar"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onSignUp(email, password)}
+          className="mt-3 w-full border border-[#6EB56B] text-[#6EB56B] font-semibold py-2 rounded-xl shadow disabled:opacity-60"
+          disabled={isLoading}
+        >
+          Cadastrar
         </button>
 
         <div className="mt-4 text-center text-xs text-gray-500">
-          Nao tem conta? Fale com o suporte.
+          Nao possui nosso produto? Fale com o suporte para adquirir.
         </div>
       </div>
     </div>

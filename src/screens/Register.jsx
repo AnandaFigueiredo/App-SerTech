@@ -1,6 +1,8 @@
 export default function Register({
   onBack,
   onSubmit,
+  title = "Cadastro de Animal",
+  submitLabel = "Cadastrar",
   birthDate,
   setBirthDate,
   lastBirth,
@@ -11,6 +13,8 @@ export default function Register({
   setNameNumber,
   breed,
   setBreed,
+  otherBreed,
+  setOtherBreed,
   weight,
   setWeight,
   reproStatus,
@@ -25,7 +29,7 @@ export default function Register({
         <button type="button" onClick={onBack} className="material-icons" aria-label="Voltar">
           arrow_back
         </button>
-        <h1 className="text-2xl font-bold text-[#1f2937]">Cadastro de Animal</h1>
+        <h1 className="text-2xl font-bold text-[#1f2937]">{title}</h1>
       </div>
 
       <div className="text-center text-lg font-semibold text-[#1f2937]">Informações Gerais</div>
@@ -62,6 +66,9 @@ export default function Register({
               className="w-36 rounded-md border border-gray-300 px-3 py-2 bg-white shadow-sm"
             >
               <option value="">Selecionar</option>
+              <option value="Gir">Gir</option>
+              <option value="Holstein">Holstein</option>
+              <option value="Jersey">Jersey</option>
             </select>
           </label>
           <label className="flex items-center gap-2">
@@ -130,7 +137,7 @@ export default function Register({
       </div>
 
       <div className="mt-6 flex justify-center gap-6">
-        <button type="button" onClick={onSubmit} className="bg-[#6EB56B] text-white font-semibold px-6 py-2 rounded-lg shadow">Cadastrar</button>
+        <button type="button" onClick={onSubmit} className="bg-[#6EB56B] text-white font-semibold px-6 py-2 rounded-lg shadow">{submitLabel}</button>
         <button type="button" onClick={onBack} className="bg-[#E57373] text-white font-semibold px-6 py-2 rounded-lg shadow">Cancelar</button>
       </div>
     </>

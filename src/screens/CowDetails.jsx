@@ -10,7 +10,9 @@ export default function CowDetails({
   cowStatus,
   updateCowStatus,
   formatDateInput,
+  cows,
 }) {
+  const cow = (cows || []).find((item) => item.id === cowId) || {};
   return (
     <>
       <div className="flex items-center gap-2 text-[#6EB56B]">
@@ -89,16 +91,24 @@ export default function CowDetails({
             </select>
           </div>
           <div className="rounded-lg border border-gray-200 px-3 py-2">
-            <div className="text-xs text-gray-500">Próxima inseminação</div>
-            <div className="font-semibold text-gray-800">15/09/2025</div>
+            <div className="text-xs text-gray-500">Última inseminação</div>
+            <div className="font-semibold text-gray-800">{cow.lastInsemination || "-"}</div>
           </div>
           <div className="rounded-lg border border-gray-200 px-3 py-2">
             <div className="text-xs text-gray-500">Quantidade de filhos</div>
-            <div className="font-semibold text-gray-800">5</div>
+            <div className="font-semibold text-gray-800">{cow.nCrias || "-"}</div>
           </div>
           <div className="rounded-lg border border-gray-200 px-3 py-2">
             <div className="text-xs text-gray-500">Último parto</div>
-            <div className="font-semibold text-gray-800">15/02/2025</div>
+            <div className="font-semibold text-gray-800">{cow.lastBirth || "-"}</div>
+          </div>
+          <div className="rounded-lg border border-gray-200 px-3 py-2">
+            <div className="text-xs text-gray-500">Data de nascimento</div>
+            <div className="font-semibold text-gray-800">{cow.birthDate || "-"}</div>
+          </div>
+          <div className="rounded-lg border border-gray-200 px-3 py-2">
+            <div className="text-xs text-gray-500">Última inseminação</div>
+            <div className="font-semibold text-gray-800">{cow.lastInsemination || "-"}</div>
           </div>
         </div>
 

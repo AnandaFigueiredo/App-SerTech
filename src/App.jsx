@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Home from "./screens/Home.jsx";
 import Alerts from "./screens/Alerts.jsx";
 import Urgent from "./screens/Urgent.jsx";
@@ -8,6 +8,8 @@ import CowDetails from "./screens/CowDetails.jsx";
 import WeeklyData from "./screens/WeeklyData.jsx";
 import Reports from "./screens/Reports.jsx";
 import Login from "./screens/Login.jsx";
+import { supabase } from "./lib/supabaseClient.js";
+import Profile from "./screens/Profile.jsx";
 
 export default function App() {
   const defaultCowStatus = {
@@ -24,10 +26,18 @@ export default function App() {
   const [lastInsemination, setLastInsemination] = useState("");
   const [nameNumber, setNameNumber] = useState("");
   const [breed, setBreed] = useState("");
+  const [otherBreed, setOtherBreed] = useState("");
   const [weight, setWeight] = useState("");
   const [reproStatus, setReproStatus] = useState("");
   const [nCrias, setNCrias] = useState("");
   const [fertilizationDate, setFertilizationDate] = useState("");
+  const [editingCowId, setEditingCowId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [plan, setPlan] = useState("free");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
+  const [accessNotice, setAccessNotice] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [cows, setCows] = useState([
     {
       id: "100",
@@ -36,6 +46,11 @@ export default function App() {
       weight: "700 kg",
       consumption: "20 kg",
       production: "30 litros",
+      birthDate: "",
+      lastBirth: "",
+      lastInsemination: "",
+      breed: "",
+      nCrias: "",
     },
     {
       id: "120",
@@ -44,6 +59,11 @@ export default function App() {
       weight: "700 kg",
       consumption: "13 kg",
       production: "10 litros",
+      birthDate: "",
+      lastBirth: "",
+      lastInsemination: "",
+      breed: "",
+      nCrias: "",
     },
     {
       id: "127",
@@ -52,6 +72,11 @@ export default function App() {
       weight: "700 kg",
       consumption: "17 kg",
       production: "28 litros",
+      birthDate: "",
+      lastBirth: "",
+      lastInsemination: "",
+      breed: "",
+      nCrias: "",
     },
   ]);
   const [fertilizations, setFertilizations] = useState({
@@ -61,7 +86,24 @@ export default function App() {
   });
   const [cowStatus, setCowStatus] = useState(defaultCowStatus);
 
+  const restrictedViews = useMemo(
+    () => new Set(["alerts", "urgent", "cows", "cowDetails", "weekly", "reports"]),
+    []
+  );
+
+  const isPaid = plan === "paid";
+
   const goBack = () => setView("home");
+
+  const guardView = (nextView) => {
+    if (!isPaid && restrictedViews.has(nextView)) {
+      setAccessNotice("Funcionalidade bloqueada. Faça upgrade para liberar o plano completo.");
+      setView("home");
+      return;
+    }
+    setAccessNotice("");
+    setView(nextView);
+  };
 
   const formatDateInput = (value) => {
     const digits = value.replace(/\D/g, "").slice(0, 8);
@@ -114,33 +156,106 @@ export default function App() {
     setCowStatus((prev) => ({ ...prev, [cowId]: value }));
   };
 
-  const addCow = () => {
-    const id = nameNumber.trim();
-    if (!id) return;
-    const weightText = weight ? `${weight} kg` : "0 kg";
-    setCows((prev) => [
-      ...prev,
-      {
-        id,
-        severity: "attention",
-        severityLabel: "Atenção",
-        weight: weightText,
-        consumption: "0 kg",
-        production: "0 litros",
-      },
-    ]);
-    setCowStatus((prev) => ({ ...prev, [id]: reproStatus || "Vazia" }));
-    setFertilizations((prev) => ({ ...prev, [id]: [] }));
-    setSelectedCow(id);
-    setView("cows");
+  const clearCowForm = () => {
     setNameNumber("");
     setBreed("");
+    setOtherBreed("");
     setWeight("");
     setReproStatus("");
     setNCrias("");
     setBirthDate("");
     setLastBirth("");
     setLastInsemination("");
+    setEditingCowId(null);
+  };
+
+  const addCow = () => {
+    const id = nameNumber.trim();
+    if (!id) return;
+    const weightText = weight ? `${weight} kg` : "0 kg";
+    const finalBreed = breed === "Outra" ? otherBreed.trim() : breed;
+    setCows((prev) => [
+      ...prev,
+      {
+        id,
+        severity: "pending",
+        severityLabel: "Sem dados",
+        weight: weightText,
+        consumption: "0 kg",
+        production: "0 litros",
+        birthDate,
+        lastBirth,
+        lastInsemination,
+        breed: finalBreed,
+        nCrias,
+      },
+    ]);
+    setCowStatus((prev) => ({ ...prev, [id]: reproStatus || "Vazia" }));
+    setFertilizations((prev) => ({ ...prev, [id]: [] }));
+    setSelectedCow(id);
+    setView("cows");
+    clearCowForm();
+  };
+
+  const startEditCow = (cowId) => {
+    const cow = cows.find((item) => item.id === cowId);
+    if (!cow) return;
+    setEditingCowId(cowId);
+    setNameNumber(cow.id || "");
+    setBirthDate(cow.birthDate || "");
+    setLastBirth(cow.lastBirth || "");
+    setLastInsemination(cow.lastInsemination || "");
+    setBreed(cow.breed || "");
+    setOtherBreed("");
+    setWeight((cow.weight || "").replace(/\D/g, ""));
+    setReproStatus(cowStatus[cowId] || "");
+    setNCrias(cow.nCrias || "");
+    setView("register");
+  };
+
+  const updateCow = () => {
+    if (!editingCowId) return;
+    const newId = nameNumber.trim() || editingCowId;
+    const weightText = weight ? `${weight} kg` : "0 kg";
+    const finalBreed = breed === "Outra" ? otherBreed.trim() : breed;
+
+    setCows((prev) =>
+      prev.map((cow) =>
+        cow.id === editingCowId
+          ? {
+              ...cow,
+              id: newId,
+              weight: weightText,
+              birthDate,
+              lastBirth,
+              lastInsemination,
+              breed: finalBreed,
+              nCrias,
+            }
+          : cow
+      )
+    );
+
+    if (newId !== editingCowId) {
+      setCowStatus((prev) => {
+        const next = { ...prev, [newId]: reproStatus || prev[editingCowId] || "Vazia" };
+        delete next[editingCowId];
+        return next;
+      });
+      setFertilizations((prev) => {
+        const next = { ...prev, [newId]: prev[editingCowId] || [] };
+        delete next[editingCowId];
+        return next;
+      });
+      if (selectedCow === editingCowId) {
+        setSelectedCow(newId);
+      }
+    } else if (reproStatus) {
+      setCowStatus((prev) => ({ ...prev, [editingCowId]: reproStatus }));
+    }
+
+    setView("cows");
+    clearCowForm();
   };
 
   const openCowDetails = (cowId) => {
@@ -173,6 +288,105 @@ export default function App() {
 
   const isLogin = view === "login";
 
+  const fetchPlan = async (userId) => {
+    if (!userId) return;
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("plan")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      setPlan("free");
+      setAuthError("Nao foi possivel carregar o plano do usuario.");
+      return;
+    }
+    setPlan(data?.plan || "free");
+  };
+
+  const handleLogin = async (email, password) => {
+    setAuthError("");
+    setAuthLoading(true);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      setAuthLoading(false);
+      setAuthError(error.message);
+      return;
+    }
+    const nextUser = data?.user || data?.session?.user;
+    setUser(nextUser || null);
+    await fetchPlan(nextUser?.id);
+    setView("home");
+    setAuthLoading(false);
+  };
+
+  const handleSignUp = async (email, password) => {
+    setAuthError("");
+    setAuthLoading(true);
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) {
+      setAuthLoading(false);
+      setAuthError(error.message);
+      return;
+    }
+    const nextUser = data?.user || data?.session?.user;
+    if (nextUser?.id) {
+      await supabase.from("profiles").insert({ id: nextUser.id, plan: "free" });
+      setPlan("free");
+    }
+    setAuthLoading(false);
+    setAuthError("Cadastro realizado. Entre com seu email e senha.");
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await supabase.auth.signOut();
+    setUser(null);
+    setPlan("free");
+    setView("login");
+    setIsLoggingOut(false);
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    const initAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!isMounted) return;
+      const sessionUser = data?.session?.user || null;
+      setUser(sessionUser);
+      if (sessionUser?.id) {
+        await fetchPlan(sessionUser.id);
+      }
+    };
+    initAuth();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const sessionUser = session?.user || null;
+      setUser(sessionUser);
+      if (sessionUser?.id) {
+        fetchPlan(sessionUser.id);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      listener?.subscription?.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isPaid && restrictedViews.has(view)) {
+      setAccessNotice("Funcionalidade bloqueada. Faça upgrade para liberar o plano completo.");
+      setView("home");
+    }
+  }, [isPaid, restrictedViews, view]);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f6fa]">
       {!isLogin && (
@@ -189,9 +403,14 @@ export default function App() {
             </div>
           </div>
           <div className="ml-auto flex items-center h-full">
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow">
+            <button
+              type="button"
+              onClick={() => setView("profile")}
+              className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow"
+              aria-label="Perfil"
+            >
               <span className="material-icons text-agroGreen text-2xl">person</span>
-            </div>
+            </button>
           </div>
         </div>
       )}
@@ -201,16 +420,26 @@ export default function App() {
           isLogin ? "items-center justify-center" : "gap-4"
         }`}
       >
-        {view === "login" && <Login onLogin={() => setView("home")} />}
+        {view === "login" && (
+          <Login
+            onLogin={handleLogin}
+            onSignUp={handleSignUp}
+            isLoading={authLoading}
+            error={authError}
+          />
+        )}
 
         {view === "home" && (
           <Home
-            onViewAlerts={() => setView("alerts")}
-            onViewUrgent={() => setView("urgent")}
-            onViewCows={() => setView("cows")}
+            onViewAlerts={() => guardView("alerts")}
+            onViewUrgent={() => guardView("urgent")}
+            onViewCows={() => guardView("cows")}
             onViewRegister={() => setView("register")}
-            onViewWeekly={() => setView("weekly")}
-            onViewReports={() => setView("reports")}
+            onViewWeekly={() => guardView("weekly")}
+            onViewReports={() => guardView("reports")}
+            isPaid={isPaid}
+            accessNotice={accessNotice}
+            onLocked={() => setAccessNotice("Funcionalidade bloqueada. Faça upgrade para liberar o plano completo.")}
           />
         )}
 
@@ -220,8 +449,11 @@ export default function App() {
 
         {view === "register" && (
           <Register
-            onBack={goBack}
-            onSubmit={addCow}
+            onBack={() => {
+              setView(editingCowId ? "cows" : "home");
+              clearCowForm();
+            }}
+            onSubmit={editingCowId ? updateCow : addCow}
             birthDate={birthDate}
             setBirthDate={setBirthDate}
             lastBirth={lastBirth}
@@ -232,6 +464,8 @@ export default function App() {
             setNameNumber={setNameNumber}
             breed={breed}
             setBreed={setBreed}
+            otherBreed={otherBreed}
+            setOtherBreed={setOtherBreed}
             weight={weight}
             setWeight={setWeight}
             reproStatus={reproStatus}
@@ -239,6 +473,8 @@ export default function App() {
             nCrias={nCrias}
             setNCrias={setNCrias}
             formatDateInput={formatDateInput}
+            title={editingCowId ? "Atualizar Animal" : "Cadastro de Animal"}
+            submitLabel={editingCowId ? "Atualizar" : "Cadastrar"}
           />
         )}
 
@@ -246,6 +482,7 @@ export default function App() {
           <Cows
             onBack={goBack}
             onViewDetails={openCowDetails}
+            onEditCow={startEditCow}
             cowStatus={cowStatus}
             cows={cows}
             onRemoveCow={removeCowWithConfirm}
@@ -265,23 +502,33 @@ export default function App() {
             cowStatus={cowStatus}
             updateCowStatus={updateCowStatus}
             formatDateInput={formatDateInput}
+            cows={cows}
           />
         )}
 
         {view === "weekly" && <WeeklyData onBack={goBack} />}
 
         {view === "reports" && <Reports onBack={goBack} />}
+
+        {view === "profile" && (
+          <Profile
+            userEmail={user?.email}
+            planLabel={plan === "paid" ? "Plano Completo" : "Plano Gratuito"}
+            onLogout={handleLogout}
+            isLoading={isLoggingOut}
+          />
+        )}
       </div>
 
       {isMenuOpen && view === "home" && (
         <div className="px-4 pb-2">
           <div className="bg-white rounded-2xl shadow-lg p-4">
             <div className="grid grid-cols-4 gap-3 text-center text-xs text-gray-600">
-              <button type="button" onClick={() => setView("cows")} className="flex flex-col items-center gap-1">
+              <button type="button" onClick={() => guardView("cows")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">agriculture</span>
                 Vacas
               </button>
-              <button type="button" onClick={() => setView("reports")} className="flex flex-col items-center gap-1">
+              <button type="button" onClick={() => guardView("reports")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">description</span>
                 Relatórios
               </button>
@@ -289,7 +536,7 @@ export default function App() {
                 <span className="material-icons text-[#6EB56B]">add</span>
                 Novo
               </button>
-              <button type="button" onClick={() => setView("weekly")} className="flex flex-col items-center gap-1">
+              <button type="button" onClick={() => guardView("weekly")} className="flex flex-col items-center gap-1">
                 <span className="material-icons text-[#6EB56B]">bar_chart</span>
                 Semana
               </button>
@@ -315,9 +562,9 @@ export default function App() {
             <span className="material-icons">menu</span>
             Menu
           </button>
-          <button type="button" className="flex flex-col items-center flex-1">
+          <button type="button" onClick={() => setView("profile")} className="flex flex-col items-center flex-1">
             <span className="material-icons">settings</span>
-            Suporte
+            Perfil
           </button>
         </nav>
       )}

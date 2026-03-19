@@ -5,10 +5,21 @@ export default function Home({
   onViewRegister,
   onViewWeekly,
   onViewReports,
+  isPaid,
+  accessNotice,
+  onLocked,
 }) {
+  const lockedClasses = "opacity-50";
+  const handleLocked = () => onLocked && onLocked();
+
   return (
     <>
       <h1 className="text-2xl font-bold mt-2">Painel</h1>
+      {!isPaid && accessNotice && (
+        <div className="rounded-xl border border-[#F3CACA] bg-[#FDEDED] px-4 py-3 text-sm text-[#B45353] shadow-sm">
+          {accessNotice}
+        </div>
+      )}
       <div className="bg-gradient-to-r from-blue-500 to-blue-300 rounded-xl p-4 flex items-center gap-4 shadow">
         <span className="material-icons text-white text-3xl">wb_sunny</span>
         <div className="flex flex-col">
@@ -27,9 +38,16 @@ export default function Home({
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={onViewAlerts}
-            className="flex-1 bg-yellow-100 rounded-lg p-3 flex flex-col items-center shadow"
+            onClick={isPaid ? onViewAlerts : handleLocked}
+            className={`relative flex-1 bg-yellow-100 rounded-lg p-3 flex flex-col items-center shadow ${
+              !isPaid ? lockedClasses : ""
+            }`}
           >
+            {!isPaid && (
+              <span className="absolute right-2 top-2 material-icons text-[#6B7280] text-sm">
+                lock
+              </span>
+            )}
             <span className="material-icons text-yellow-500 text-2xl mb-1">
               warning
             </span>
@@ -38,9 +56,16 @@ export default function Home({
           </button>
           <button
             type="button"
-            onClick={onViewUrgent}
-            className="flex-1 bg-red-100 rounded-lg p-3 flex flex-col items-center shadow"
+            onClick={isPaid ? onViewUrgent : handleLocked}
+            className={`relative flex-1 bg-red-100 rounded-lg p-3 flex flex-col items-center shadow ${
+              !isPaid ? lockedClasses : ""
+            }`}
           >
+            {!isPaid && (
+              <span className="absolute right-2 top-2 material-icons text-[#6B7280] text-sm">
+                lock
+              </span>
+            )}
             <span className="material-icons text-red-500 text-2xl mb-1">error</span>
             <span className="font-bold text-red-800">2 urgências</span>
             <span className="text-xs text-red-800">Toque para visualizar</span>
@@ -53,17 +78,31 @@ export default function Home({
         <div className="grid grid-cols-2 gap-4 place-items-center">
           <button
             type="button"
-            onClick={onViewCows}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
+            onClick={isPaid ? onViewCows : handleLocked}
+            className={`relative bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight ${
+              !isPaid ? lockedClasses : ""
+            }`}
           >
+            {!isPaid && (
+              <span className="absolute right-2 top-2 material-icons text-white/80 text-sm">
+                lock
+              </span>
+            )}
             <span className="material-icons text-3xl">agriculture</span>
             Vacas
           </button>
           <button
             type="button"
-            onClick={onViewReports}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
+            onClick={isPaid ? onViewReports : handleLocked}
+            className={`relative bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight ${
+              !isPaid ? lockedClasses : ""
+            }`}
           >
+            {!isPaid && (
+              <span className="absolute right-2 top-2 material-icons text-white/80 text-sm">
+                lock
+              </span>
+            )}
             <span className="material-icons text-3xl">description</span>
             Relatórios
           </button>
@@ -77,9 +116,16 @@ export default function Home({
           </button>
           <button
             type="button"
-            onClick={onViewWeekly}
-            className="bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight"
+            onClick={isPaid ? onViewWeekly : handleLocked}
+            className={`relative bg-[#6EB56B] rounded-lg flex flex-col items-center justify-center h-28 w-full max-w-[150px] p-3 text-white font-bold text-lg gap-2 shadow text-center leading-tight ${
+              !isPaid ? lockedClasses : ""
+            }`}
           >
+            {!isPaid && (
+              <span className="absolute right-2 top-2 material-icons text-white/80 text-sm">
+                lock
+              </span>
+            )}
             <span className="material-icons text-3xl">bar_chart</span>
             Dados da semana
           </button>

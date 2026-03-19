@@ -20,9 +20,16 @@ const severityStyles = {
     icon: "warning",
     label: "Atenção",
   },
+  pending: {
+    bg: "bg-[#E8F3FF]",
+    border: "border-[#6AA7D4]",
+    text: "text-[#3B82C4]",
+    icon: "hourglass_empty",
+    label: "Sem dados",
+  },
 };
 
-export default function Cows({ onBack, onViewDetails, cowStatus, cows, onRemoveCow }) {
+export default function Cows({ onBack, onViewDetails, onEditCow, cowStatus, cows, onRemoveCow }) {
   return (
     <>
       <div className="flex items-center gap-2 text-[#6EB56B]">
@@ -69,7 +76,10 @@ export default function Cows({ onBack, onViewDetails, cowStatus, cows, onRemoveC
                 <div>Status: {cowStatus[cow.id]}</div>
                 <div className="mt-2 flex items-center justify-between">
                   <button type="button" onClick={() => onViewDetails(cow.id)} className={style.text}>Ver Detalhes →</button>
-                  <button type="button" onClick={() => onRemoveCow(cow.id)} className="text-red-500">Remover</button>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => onEditCow(cow.id)} className="text-[#6EB56B]">Atualizar</button>
+                    <button type="button" onClick={() => onRemoveCow(cow.id)} className="text-red-500">Remover</button>
+                  </div>
                 </div>
               </div>
             </div>
