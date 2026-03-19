@@ -326,6 +326,11 @@ export default function App() {
   const handleSignUp = async (email, password) => {
     setAuthError("");
     setAuthLoading(true);
+    if (!email || !password) {
+      setAuthLoading(false);
+      setAuthError("Informe email e senha para cadastrar.");
+      return;
+    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -337,8 +342,19 @@ export default function App() {
     }
     const nextUser = data?.user || data?.session?.user;
     if (nextUser?.id) {
-      await supabase.from("profiles").insert({ id: nextUser.id, plan: "free" });
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .upsert({ id: nextUser.id, plan: "free" }, { onConflict: "id" });
+      if (profileError) {
+        setAuthLoading(false);
+        setAuthError("Nao foi possivel criar o plano gratuito.");
+        return;
+      }
+      setUser(nextUser);
       setPlan("free");
+      setView("home");
+      setAuthLoading(false);
+      return;
     }
     setAuthLoading(false);
     setAuthError("Cadastro realizado. Entre com seu email e senha.");
