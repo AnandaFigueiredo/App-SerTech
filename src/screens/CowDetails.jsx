@@ -11,8 +11,12 @@ export default function CowDetails({
   updateCowStatus,
   formatDateInput,
   cows,
+  isStatusLocked,
+  statusLockDays,
+  lockedStatusLabel,
 }) {
   const cow = (cows || []).find((item) => item.id === cowId) || {};
+  const currentStatus = cowStatus[cowId] || lockedStatusLabel || "Aguardando dados";
   return (
     <>
       <div className="flex items-center gap-2 text-[#6EB56B]">
@@ -77,14 +81,21 @@ export default function CowDetails({
 
       <div className="text-lg font-semibold">Reprodução</div>
       <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm text-sm text-gray-700">
+        {isStatusLocked && (
+          <div className="mb-4 rounded-lg border border-[#E0B84E] bg-[#FFF7D6] px-3 py-2 text-xs text-[#7A5B12]">
+            Este animal ainda está em acompanhamento inicial. O status fica bloqueado por {statusLockDays} dias.
+          </div>
+        )}
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="flex items-center justify-between rounded-lg border border-gray-200 px-3 py-2">
             <span>Status</span>
             <select
-              value={cowStatus[cowId]}
+              value={currentStatus}
               onChange={(e) => updateCowStatus(cowId, e.target.value)}
+              disabled={isStatusLocked}
               className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm"
             >
+              <option>{lockedStatusLabel || "Aguardando dados"}</option>
               <option>Prenha</option>
               <option>Vazia</option>
               <option>Inseminada</option>

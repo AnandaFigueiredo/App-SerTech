@@ -69,8 +69,21 @@ export default function Register({
               <option value="Gir">Gir</option>
               <option value="Holstein">Holstein</option>
               <option value="Jersey">Jersey</option>
+              <option value="Outra">Outra</option>
             </select>
           </label>
+          {breed === "Outra" && (
+            <label className="flex items-center gap-2">
+              Especifique:
+              <input
+                type="text"
+                value={otherBreed}
+                onChange={(e) => setOtherBreed(e.target.value)}
+                className="w-36 rounded-md border border-gray-300 px-3 py-2 bg-white shadow-sm"
+                placeholder="Digite a raca"
+              />
+            </label>
+          )}
           <label className="flex items-center gap-2">
             Peso:
             <input

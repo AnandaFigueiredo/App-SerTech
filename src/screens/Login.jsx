@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-export default function Login({ onLogin, onSignUp, isLoading, error }) {
+export default function Login({ onLogin, onCreateAccount, isLoading, error, notice }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -52,6 +52,12 @@ export default function Login({ onLogin, onSignUp, isLoading, error }) {
           </div>
         )}
 
+        {notice && (
+          <div className="mt-3 rounded-lg border border-[#CFE8D1] bg-[#F2FBF3] px-3 py-2 text-xs text-[#2F6B35]">
+            {notice}
+          </div>
+        )}
+
         <button
           type="button"
           onClick={() => onLogin(email, password)}
@@ -63,15 +69,15 @@ export default function Login({ onLogin, onSignUp, isLoading, error }) {
 
         <button
           type="button"
-          onClick={() => onSignUp(email, password)}
+          onClick={onCreateAccount}
           className="mt-3 w-full border border-[#6EB56B] text-[#6EB56B] font-semibold py-2 rounded-xl shadow disabled:opacity-60"
           disabled={isLoading}
         >
-          Cadastrar
+          Criar conta
         </button>
 
         <div className="mt-4 text-center text-xs text-gray-500">
-          Nao possui nosso produto? Fale com o suporte para adquirir.
+          Nao possui conta? Crie um acesso novo para continuar.
         </div>
       </div>
     </div>

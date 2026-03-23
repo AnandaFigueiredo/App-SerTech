@@ -73,7 +73,7 @@ export default function Cows({ onBack, onViewDetails, onEditCow, cowStatus, cows
                 </div>
               </div>
               <div className="mt-3 text-sm">
-                <div>Status: {cowStatus[cow.id]}</div>
+                <div>Status: {cowStatus[cow.id] || "Aguardando dados"}</div>
                 <div className="mt-2 flex items-center justify-between">
                   <button type="button" onClick={() => onViewDetails(cow.id)} className={style.text}>Ver Detalhes →</button>
                   <div className="flex items-center gap-3">
